@@ -43,6 +43,26 @@ namespace Calculator
             OperationHistoryTextBlock.Text = CalculationTextBox.Text + " " + btn.Content.ToString();
             CalculationTextBox.Text += btn.Content.ToString();
         }
-       
+        private void OperationButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            if (!string.IsNullOrEmpty(CalculationTextBox.Text))
+            {
+                if (double.TryParse(CalculationTextBox.Text, System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture, out first))
+                {
+                    operation = btn.Content.ToString()[0];
+                    OperationHistoryTextBlock.Text = first.ToString(System.Globalization.CultureInfo.InvariantCulture) + " " + operation.ToString();
+                    lastActionWasOperation = true;
+                    CalculationTextBox.Clear();
+                }
+                else
+                {
+                    CalculationTextBox.Text = "Invalid number format";
+                    return;
+                }
+            }
+        }
+
     }
 }
