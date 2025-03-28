@@ -30,12 +30,12 @@ namespace Calculator
         public void Execute()
         {
             calculator.CalculationTextBox.Text = result.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            calculator.OperationTextBlock.Text = operationText;
+            calculator.OperationHistoryTextBlock.Text = operationText;
         }
         public void Undo()
         {
             calculator.CalculationTextBox.Text = previousResult.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            calculator.OperationTextBlock.Text = previousOperationText;
+            calculator.OperationHistoryTextBlock.Text = previousOperationText;
         }
         public void Redo()
         {

@@ -71,9 +71,8 @@ namespace Calculator
                System.Globalization.CultureInfo.InvariantCulture, out second))
             {
                 double result = 0;
-                string operationText = first.ToString(System.Globalization.CultureInfo.InvariantCulture) +
-                " " + operation.ToString() + " " + second.ToString(System.Globalization.CultureInfo.InvariantCulture) + " =";
-                OperationHistoryTextBlock.Text = operationText;
+                string operationText = first.ToString(System.Globalization.CultureInfo.InvariantCulture) + " " +
+                operation.ToString();
                 switch (operation)
                 {
                     case '+': result = first + second; break;
@@ -103,6 +102,34 @@ namespace Calculator
             {
                 CalculationTextBox.Text = "Invalid number format";
             }
+        }
+
+        private void ClearAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            CalculationTextBox.Clear();
+            OperationHistoryTextBlock.Text = string.Empty;
+            first = 0;
+            second = 0;
+            operation = '\0';
+        }
+
+        private void ClearElementButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CalculationTextBox.Text.Length > 0)
+            {
+                CalculationTextBox.Text = CalculationTextBox.Text.Remove(CalculationTextBox.Text.Length - 1);
+            }
+        }
+
+        private void UndoButton_Click(object sender, RoutedEventArgs e)
+        {
+            commandInvoker.UndoCommand();
+        }
+
+        private void RedoButton_Click(object sender, RoutedEventArgs e)
+        {
+            commandInvoker.RedoCommand();
+           
         }
     }
 }
