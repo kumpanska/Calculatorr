@@ -64,5 +64,45 @@ namespace Calculator
             }
         }
 
+        private void EqualsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(CalculationTextBox.Text)) return;
+            if (double.TryParse(CalculationTextBox.Text, System.Globalization.NumberStyles.Any,
+               System.Globalization.CultureInfo.InvariantCulture, out second))
+            {
+                double result = 0;
+                string operationText = first.ToString(System.Globalization.CultureInfo.InvariantCulture) +
+                " " + operation.ToString() + " " + second.ToString(System.Globalization.CultureInfo.InvariantCulture) + " =";
+                OperationHistoryTextBlock.Text = operationText;
+                switch (operation)
+                {
+                    case '+': result = first + second; break;
+                    case '-': result = first - second; break;
+                    case '*': result = first * second; break;
+                    case '/':
+                        if (second != 0)
+                        {
+                            result = first / second;
+                        }
+                        else
+                        {
+                            CalculationTextBox.Text = "Divided by zero";
+                            return;
+                        }
+                        break;
+                    case '^': result = Math.Pow(first, second); break;
+                    default: return;
+                }
+                string previousOperationText = OperationHistoryTextBlock.Text;
+                CalculatorCommand command = new CalculatorCommand(this, result, first, operationText, previousOperationText);
+                commandInvoker.ExecuteCommand(command);
+                CalculationTextBox.Text = result.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                lastActionWasOperation = false;
+            }
+            else
+            {
+                CalculationTextBox.Text = "Invalid number format";
+            }
+        }
     }
 }
