@@ -161,5 +161,14 @@ namespace Calculator
                 ConstantEButton.Visibility = Visibility.Collapsed;
             }
         }
+        private void PIButton_Click(object sender, RoutedEventArgs e)
+        {
+            CalculationTextBox.Text += Math.PI.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        private void ConstantEButton_Click(object sender, RoutedEventArgs e)
+        {
+            CalculationTextBox.Text += Math.E.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
     }
 }
