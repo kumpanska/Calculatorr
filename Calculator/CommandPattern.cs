@@ -42,7 +42,37 @@ namespace Calculator
             Execute();
         }
     }
-   
+    public class CommandInvoker
+    {
+        private Stack<ICommand> undoStack= new Stack<ICommand>();
+        private Stack<ICommand> redoStack = new Stack<ICommand>();
+        public void ExecuteCommand(ICommand command)
+        {
+            command.Execute();
+            undoStack.Push(command);
+            redoStack.Clear();
+        }
+
+        public void UndoCommand()
+        {
+            if (undoStack.Count > 0)
+            {
+                ICommand command = undoStack.Pop();
+                command.Undo();
+                redoStack.Push(command);
+            }
+
+        }
+        public void RedoCommand()
+        {
+            if (redoStack.Count > 0)
+            {
+                ICommand command = redoStack.Pop();
+                command.Redo();
+                undoStack.Push(command);
+            }
+        }
+    }
     class CommandPattern
     {
     }
