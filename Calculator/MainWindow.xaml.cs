@@ -23,6 +23,26 @@ namespace Calculator
         public MainWindow()
         {
             InitializeComponent();
+            OperationHistoryTextBlock.Text = "0";
+            CalculationTextBox.Text = "0";
         }
+        private double first;
+        private double second;
+        private char operation;
+        private CommandInvoker commandInvoker = new CommandInvoker();
+        private bool lastActionWasOperation = false;
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            if (lastActionWasOperation)
+            {
+                CalculationTextBox.Clear();
+                lastActionWasOperation = false;
+            }
+            OperationHistoryTextBlock.Text = CalculationTextBox.Text + " " + btn.Content.ToString();
+            CalculationTextBox.Text += btn.Content.ToString();
+        }
+       
     }
 }
