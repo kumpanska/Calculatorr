@@ -76,6 +76,14 @@
             <Button x:Name="ThreeButton" Grid.Column="5" Grid.Row="7" Content="3" Margin="-4,0,0,0"  Click="Button_Click"/>
             <Button x:Name="DoubleZeroButton" Grid.Column="1" Grid.Row="9" Content="00" Margin="-4,0,0,0" Click="Button_Click"/>
             <Button x:Name="ZeroButton" Grid.Column="3" Grid.Row="9" Content="0" Margin="-4,0,0,0"  Click="Button_Click"/>
+
+            <Button x:Name="PIButton" Grid.Column="13" Grid.Row="1" Content="π" Margin="-4,0,0,0" Click="PIButton_Click" Visibility="Collapsed"/>
+            <Button x:Name="SqrtButton" Grid.Column="13" Grid.Row="3" Content="√x" Margin="-4,0,0,0" Click="SqrtButton_Click" Visibility="Collapsed"/>
+            <Button x:Name="PowButton" Grid.Column="13" Grid.Row="5" Content="n^x" Margin="-4,0,0,0" Click="PowButton_Click" Visibility="Collapsed"/>
+            <Button x:Name="LogarithmButton" Grid.Column="13" Grid.Row="7" Content="In" Margin="-4,0,0,0" Click="LogarithmButton_Click" Visibility="Collapsed"/>
+            <Button x:Name="ConstantEButton" Grid.Column="13" Grid.Row="9" Content="e" Margin="-4,0,0,0" Click="ConstantEButton_Click" Visibility="Collapsed"/>
         </Grid>
-        </Grid>
+        <Button x:Name="SandwichButton" Content="≡" Click="SandwichButton_Click" Margin="10,19,0,109" HorizontalAlignment="Left"  Width="52" />
+        <Button x:Name="BackButton" Content=">" Click="BackButton_Click" Visibility="Hidden" Margin="10,19,0,109" HorizontalAlignment="Left" Width="52"/>
+    </Grid>
 </Window>
