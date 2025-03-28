@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -130,6 +131,35 @@ namespace Calculator
         {
             commandInvoker.RedoCommand();
            
+        }
+
+        private void SandwichButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SandwichButton.Visibility == Visibility.Visible)
+            {
+                SandwichButton.Visibility = Visibility.Hidden;
+                BackButton.Visibility = Visibility.Visible;
+                AdditionalColumn.Width = new GridLength(1, GridUnitType.Star);
+                PIButton.Visibility = Visibility.Visible;
+                SqrtButton.Visibility = Visibility.Visible;
+                PowButton.Visibility = Visibility.Visible;
+                LogarithmButton.Visibility = Visibility.Visible;
+                ConstantEButton.Visibility = Visibility.Visible;
+            }
+        }
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (BackButton.Visibility == Visibility.Visible)
+            {
+                SandwichButton.Visibility = Visibility.Visible;
+                BackButton.Visibility = Visibility.Hidden;
+                AdditionalColumn.Width = new GridLength(0);
+                PIButton.Visibility = Visibility.Collapsed;
+                SqrtButton.Visibility = Visibility.Collapsed;
+                PowButton.Visibility = Visibility.Collapsed;
+                LogarithmButton.Visibility = Visibility.Collapsed;
+                ConstantEButton.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }
