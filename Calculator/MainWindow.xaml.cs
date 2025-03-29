@@ -72,8 +72,11 @@ namespace Calculator
                System.Globalization.CultureInfo.InvariantCulture, out second))
             {
                 double result = 0;
-                string operationText = first.ToString(System.Globalization.CultureInfo.InvariantCulture) + " " +
-                operation.ToString();
+                string operationText = first.ToString(System.Globalization.CultureInfo.InvariantCulture) +
+                    " " + operation.ToString() + " " +
+                    second.ToString(System.Globalization.CultureInfo.InvariantCulture) + " =";
+                double previousResult = first;
+                OperationHistoryTextBlock.Text = operationText;
                 switch (operation)
                 {
                     case '+': result = first + second; break;
@@ -94,7 +97,7 @@ namespace Calculator
                     default: return;
                 }
                 string previousOperationText = OperationHistoryTextBlock.Text;
-                CalculatorCommand command = new CalculatorCommand(this, result, first, operationText, previousOperationText);
+                CalculatorCommand command = new CalculatorCommand(this, result, previousResult, operationText, previousOperationText);
                 commandInvoker.ExecuteCommand(command);
                 CalculationTextBox.Text = result.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 lastActionWasOperation = false;
@@ -130,7 +133,7 @@ namespace Calculator
         private void RedoButton_Click(object sender, RoutedEventArgs e)
         {
             commandInvoker.RedoCommand();
-           
+
         }
 
         private void SandwichButton_Click(object sender, RoutedEventArgs e)
@@ -169,6 +172,47 @@ namespace Calculator
         private void ConstantEButton_Click(object sender, RoutedEventArgs e)
         {
             CalculationTextBox.Text += Math.E.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        }
+        private void SqrtButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (double.TryParse(CalculationTextBox.Text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double number))
+            {
+                if (number < 0)
+                {
+                    CalculationTextBox.Text = "Invalid input for square root";
+                    return;
+                }
+
+                double result = Math.Sqrt(number);
+                string operationText = $"√({number.ToString(System.Globalization.CultureInfo.InvariantCulture)})";
+                string previousOperationText = OperationHistoryTextBlock.Text;
+                CalculatorCommand command = new CalculatorCommand(this, result, number, operationText, previousOperationText);
+                commandInvoker.ExecuteCommand(command);
+                OperationHistoryTextBlock.Text = operationText;
+                CalculationTextBox.Text = result.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                lastActionWasOperation = false;
+            }
+            else { CalculationTextBox.Text = "Invalid number format"; }
+        }
+        private void LogarithmButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (double.TryParse(CalculationTextBox.Text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double number))
+            {
+                if (number <= 0)
+                {
+                    CalculationTextBox.Text = "Invalid input for square root";
+                    return;
+                }
+                double result = Math.Log(number);
+                string operationText = $"In({number.ToString(System.Globalization.CultureInfo.InvariantCulture)})";
+                string previousOperationText = OperationHistoryTextBlock.Text;
+                CalculatorCommand command = new CalculatorCommand(this, result, number, operationText, previousOperationText);
+                commandInvoker.ExecuteCommand(command);
+                OperationHistoryTextBlock.Text = operationText;
+                CalculationTextBox.Text = result.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                lastActionWasOperation = false;
+            }
+            else { CalculationTextBox.Text = "Invalid number format"; }
         }
     }
 }

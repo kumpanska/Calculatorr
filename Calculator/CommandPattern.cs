@@ -61,7 +61,6 @@ namespace Calculator
                 command.Undo();
                 redoStack.Push(command);
             }
-
         }
         public void RedoCommand()
         {
