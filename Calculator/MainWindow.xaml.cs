@@ -24,6 +24,7 @@ namespace Calculator
         public MainWindow()
         {
             InitializeComponent();
+            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
             OperationHistoryTextBlock.Text = "0";
             CalculationTextBox.Text = "0";
         }
@@ -73,8 +74,8 @@ namespace Calculator
             {
                 double result = 0;
                 string operationText = first.ToString(System.Globalization.CultureInfo.InvariantCulture) +
-                    " " + operation.ToString() + " " +
-                    second.ToString(System.Globalization.CultureInfo.InvariantCulture) + " =";
+                     " " + operation.ToString() + " " +
+                     second.ToString(System.Globalization.CultureInfo.InvariantCulture) + " =";
                 double previousResult = first;
                 OperationHistoryTextBlock.Text = operationText;
                 switch (operation)
@@ -97,8 +98,9 @@ namespace Calculator
                     default: return;
                 }
                 string previousOperationText = OperationHistoryTextBlock.Text;
-                CalculatorCommand command = new CalculatorCommand(this, result, previousResult, operationText, previousOperationText);
+                CalculatorCommand command = new CalculatorCommand(this, result, previousResult, operationText,previousOperationText);
                 commandInvoker.ExecuteCommand(command);
+                OperationHistoryTextBlock.Text = operationText;
                 CalculationTextBox.Text = result.ToString(System.Globalization.CultureInfo.InvariantCulture);
                 lastActionWasOperation = false;
             }
@@ -184,8 +186,8 @@ namespace Calculator
                 }
 
                 double result = Math.Sqrt(number);
-                string operationText = $"√({number.ToString(System.Globalization.CultureInfo.InvariantCulture)})";
                 string previousOperationText = OperationHistoryTextBlock.Text;
+                string operationText = $"√({number.ToString(System.Globalization.CultureInfo.InvariantCulture)})";
                 CalculatorCommand command = new CalculatorCommand(this, result, number, operationText, previousOperationText);
                 commandInvoker.ExecuteCommand(command);
                 OperationHistoryTextBlock.Text = operationText;
@@ -214,5 +216,88 @@ namespace Calculator
             }
             else { CalculationTextBox.Text = "Invalid number format"; }
         }
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key >= Key.D0 && e.Key <= Key.D9)
+            {
+                if (!Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift))
+                {
+                    int number = (int)e.Key - (int)Key.D0;
+                    CalculationTextBox.Text += number.ToString();
+                }
+            }
+            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+            {
+                if (e.Key == Key.OemPlus)
+                {
+                    SetOperation('+');
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.D8)
+                {
+                    SetOperation('*');
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.D6)
+                {
+                    SetOperation('^');
+                    e.Handled = true;
+                }
+            }
+            else
+            {
+                if (e.Key == Key.OemMinus)
+                {
+                    SetOperation('-');
+                }
+                else if (e.Key == Key.OemQuestion) 
+                {
+                    SetOperation('/');
+                }
+
+                else if (e.Key == Key.OemPlus) 
+                {
+                    EqualsButton_Click(this, new RoutedEventArgs());
+                }
+                else if (e.Key == Key.OemPeriod)
+                {
+                    if (!CalculationTextBox.Text.Contains("."))
+                    {
+                        CalculationTextBox.Text += ".";
+                    }
+                }
+            }
+            if (e.Key == Key.Back)
+            {
+                ClearElementButton_Click(this, new RoutedEventArgs());
+            }
+            else if (e.Key == Key.Escape)
+            {
+                ClearAllButton_Click(this, new RoutedEventArgs());
+            }
+            else if (e.Key == Key.U)
+            {
+                UndoButton_Click(this, new RoutedEventArgs());
+            }
+            else if (e.Key == Key.R)
+            {
+                RedoButton_Click(this, new RoutedEventArgs());
+            }
+        }
+        private void SetOperation(char op)
+        {
+            if (!string.IsNullOrEmpty(CalculationTextBox.Text))
+            {
+                if (double.TryParse(CalculationTextBox.Text, System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture, out first))
+                {
+                    operation = op;
+                    OperationHistoryTextBlock.Text = first.ToString(System.Globalization.CultureInfo.InvariantCulture) + " " + op;
+                    lastActionWasOperation = true;
+                    CalculationTextBox.Clear();
+                }
+            }
+        }
+
     }
 }
