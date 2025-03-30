@@ -302,7 +302,6 @@ namespace Calculator
                 {
                     operation = '^';
                     lastActionWasOperation = true;
-                    OperationHistoryTextBlock.Text = first.ToString(System.Globalization.CultureInfo.InvariantCulture) + " ^";
                     CalculationTextBox.Clear();  
                 }
                 else
