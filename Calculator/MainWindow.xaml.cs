@@ -25,8 +25,7 @@ namespace Calculator
         {
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
-            OperationHistoryTextBlock.Text = "0";
-            CalculationTextBox.Text = "0";
+            OperationHistoryTextBlock.Text = "";
         }
         private double first;
         private double second;
@@ -42,7 +41,6 @@ namespace Calculator
                 CalculationTextBox.Clear();
                 lastActionWasOperation = false;
             }
-            OperationHistoryTextBlock.Text = CalculationTextBox.Text + " " + btn.Content.ToString();
             CalculationTextBox.Text += btn.Content.ToString();
         }
         private void OperationButton_Click(object sender, RoutedEventArgs e)
@@ -54,7 +52,6 @@ namespace Calculator
                     System.Globalization.CultureInfo.InvariantCulture, out first))
                 {
                     operation = btn.Content.ToString()[0];
-                    OperationHistoryTextBlock.Text = first.ToString(System.Globalization.CultureInfo.InvariantCulture) + " " + operation.ToString();
                     lastActionWasOperation = true;
                     CalculationTextBox.Clear();
                 }
@@ -73,11 +70,7 @@ namespace Calculator
                System.Globalization.CultureInfo.InvariantCulture, out second))
             {
                 double result = 0;
-                string operationText = first.ToString(System.Globalization.CultureInfo.InvariantCulture) +
-                     " " + operation.ToString() + " " +
-                     second.ToString(System.Globalization.CultureInfo.InvariantCulture) + " =";
-                double previousResult = first;
-                OperationHistoryTextBlock.Text = operationText;
+                string operationText = $"{first.ToString(System.Globalization.CultureInfo.InvariantCulture)} {operation} {second.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
                 switch (operation)
                 {
                     case '+': result = first + second; break;
@@ -98,10 +91,11 @@ namespace Calculator
                     default: return;
                 }
                 string previousOperationText = OperationHistoryTextBlock.Text;
-                CalculatorCommand command = new CalculatorCommand(this, result, previousResult, operationText,previousOperationText);
-                commandInvoker.ExecuteCommand(command);
                 OperationHistoryTextBlock.Text = operationText;
+                CalculatorCommand command = new CalculatorCommand(this, result, first, operationText,previousOperationText);
+                commandInvoker.ExecuteCommand(command);
                 CalculationTextBox.Text = result.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                first = result;
                 lastActionWasOperation = false;
             }
             else
@@ -175,6 +169,7 @@ namespace Calculator
         {
             CalculationTextBox.Text += Math.E.ToString(System.Globalization.CultureInfo.InvariantCulture);
         }
+
         private void SqrtButton_Click(object sender, RoutedEventArgs e)
         {
             if (double.TryParse(CalculationTextBox.Text, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double number))
@@ -206,8 +201,8 @@ namespace Calculator
                     return;
                 }
                 double result = Math.Log(number);
-                string operationText = $"In({number.ToString(System.Globalization.CultureInfo.InvariantCulture)})";
                 string previousOperationText = OperationHistoryTextBlock.Text;
+                string operationText = $"In({number.ToString(System.Globalization.CultureInfo.InvariantCulture)})";
                 CalculatorCommand command = new CalculatorCommand(this, result, number, operationText, previousOperationText);
                 commandInvoker.ExecuteCommand(command);
                 OperationHistoryTextBlock.Text = operationText;
@@ -245,7 +240,7 @@ namespace Calculator
                 }
             }
             else
-            {
+            { 
                 if (e.Key == Key.OemMinus)
                 {
                     SetOperation('-');
@@ -298,6 +293,23 @@ namespace Calculator
                 }
             }
         }
-
+        private void PowButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(CalculationTextBox.Text))
+            {
+                if (double.TryParse(CalculationTextBox.Text, System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture, out first))
+                {
+                    operation = '^';
+                    lastActionWasOperation = true;
+                    OperationHistoryTextBlock.Text = first.ToString(System.Globalization.CultureInfo.InvariantCulture) + " ^";
+                    CalculationTextBox.Clear();  
+                }
+                else
+                {
+                    CalculationTextBox.Text = "Invalid number format";
+                }
+            }
+        }
     }
 }

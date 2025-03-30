@@ -36,12 +36,10 @@ namespace Calculator
         {
             calculator.CalculationTextBox.Text = previousResult.ToString(System.Globalization.CultureInfo.InvariantCulture);
             calculator.OperationHistoryTextBlock.Text = previousOperationText;
-            Console.WriteLine(previousOperationText);
         }
         public void Redo()
         {
             Execute();
-            Console.WriteLine(previousOperationText);
         }
     }
     public class CommandInvoker
