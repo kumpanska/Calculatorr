@@ -287,7 +287,6 @@ namespace Calculator
                     System.Globalization.CultureInfo.InvariantCulture, out first))
                 {
                     operation = op;
-                    OperationHistoryTextBlock.Text = first.ToString(System.Globalization.CultureInfo.InvariantCulture) + " " + op;
                     lastActionWasOperation = true;
                     CalculationTextBox.Clear();
                 }
