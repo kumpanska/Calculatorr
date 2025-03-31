@@ -10,7 +10,6 @@ namespace Calculator
     {
         void Execute();
         void Undo();
-        void Redo();
     }
     public class CalculatorCommand : ICommand 
     {
@@ -36,10 +35,6 @@ namespace Calculator
         {
             calculator.CalculationTextBox.Text = previousResult.ToString(System.Globalization.CultureInfo.InvariantCulture);
             calculator.OperationHistoryTextBlock.Text = previousOperationText;
-        }
-        public void Redo()
-        {
-            Execute();
         }
     }
     public class CommandInvoker
@@ -67,7 +62,7 @@ namespace Calculator
             if (redoStack.Count > 0)
             {
                 ICommand command = redoStack.Pop();
-                command.Redo();
+                command.Execute();
                 undoStack.Push(command);
             }
         }
